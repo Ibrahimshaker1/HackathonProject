@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.views import APIView
-from .models import User
-from .serializers import UserSerializer, UserLoginSerializer, UserDataSerialize
+from .models import User, UploadedVideo
+from .serializers import UserSerializer, UserLoginSerializer, UserDataSerialize, UploadVideoSerializer
 from django.contrib.auth import authenticate, login
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.authtoken.models import Token
+from rest_framework.parsers import FormParser, MultiPartParser
 # Create your views here.
 
 
@@ -68,4 +69,46 @@ class Userdata(APIView):
                 )
 
 
+class UploadVideoView(APIView):
+    parser_classes = (MultiPartParser, FormParser)
+    serializer_class = UploadVideoSerializer
 
+    def post(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK)
+        else:
+            return Response(
+                serializer.errors,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+class GetVideos(APIView):
+    def get(self, request, format=None):
+        try:
+            videos = UploadedVideo.objects.all()
+            print(videos)
+            videos_dic = {}
+            number_of_video = 1
+            for video in videos:
+                videos_dic[str(number_of_video)] = {
+                    "id": video.id,
+                    "name": video.name,
+                    "video_file": video.video_file.url,
+                    "video_image": video.video_image,
+                    "uploaded_data": video.uploaded_data,
+                }
+                number_of_video += 1
+            print(videos_dic)
+            return Response(
+                videos_dic,
+                status=status.HTTP_200_OK
+            )
+        except:
+            return Response(
+                {"there is no uploaded videos"},
+                status=status.HTTP_200_OK
+            )

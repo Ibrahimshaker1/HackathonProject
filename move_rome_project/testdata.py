@@ -6,8 +6,7 @@ import django
 django.setup()
 
 from main_app import models
-user = models.User.objects.all()
-for my_user in user:
-    # token, create = Token.objects.get_or_create(user=my_user)
-    print(user)
+videos = models.UploadedVideo.objects.all()
+for video in videos:
+    video.delete()
 

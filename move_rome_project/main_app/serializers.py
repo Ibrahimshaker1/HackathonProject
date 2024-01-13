@@ -18,3 +18,10 @@ class UserLoginSerializer(serializers.Serializer):
 
 class UserDataSerialize(serializers.Serializer):
     user_token = serializers.CharField(max_length=250)
+
+
+class UploadVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.UploadedVideo
+        fields = ("name", "video_file", "video_image")
+
