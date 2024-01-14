@@ -4,9 +4,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'move_rome_project.settings')
 
 import django
 django.setup()
+from django.core.files import File
 
-from main_app import models
-videos = models.UploadedVideo.objects.all()
-for video in videos:
-    video.delete()
+
 

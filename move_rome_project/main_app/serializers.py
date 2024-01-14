@@ -25,3 +25,8 @@ class UploadVideoSerializer(serializers.ModelSerializer):
         model = models.UploadedVideo
         fields = ("name", "video_file", "video_image")
 
+
+class RoomCreateSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=250)
+
+

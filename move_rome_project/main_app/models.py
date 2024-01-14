@@ -8,9 +8,10 @@ import datetime
 
 class User(User, PermissionsMixin):
     date_joined = datetime.datetime.now()
-
+    inter_room_id = models.IntegerField(default=0)
     def __str__(self):
         return self.username
+
 
 
 class UploadedVideo(models.Model):
@@ -21,4 +22,11 @@ class UploadedVideo(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Room(models.Model):
+    name = models.CharField(max_length=250)
+    video = models.ForeignKey(UploadedVideo, on_delete=models.CASCADE,)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_in_room = models.IntegerField(default=0)
 
